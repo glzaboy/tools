@@ -1,0 +1,25 @@
+#!/bin/sh
+BASEPATH="/Users/guliuzhong/IdeaProjects"
+REPOS="tools Nifty apinew eureka flex-web apiddl config config-center"
+if [ ! -d "${BASEPATH}" ] ; then
+  mkdir -p "${BASEPATH}"
+fi
+for git in $REPOS; do
+  PROJ_PATH="${BASEPATH}/$git";
+  echo "项目目录${PROJ_PATH}"
+  if [ ! -d "${PROJ_PATH}" ] ; then
+    cd "${BASEPATH}"
+    echo "初始化项目$git"
+    git clone "git@crudelion.com:${git}.git"
+    cd "${PROJ_PATH}"
+    git submodule init
+    echo "创建${git}完成"
+  fi
+  cd "${PROJ_PATH}"
+  echo "更新git"
+  git pull origin
+  git submodule update
+  echo "项目${git}更新完成"
+
+
+done
