@@ -1,6 +1,6 @@
 #!/bin/sh
 BASEPATH="/Users/guliuzhong/IdeaProjects"
-REPOS="tools Nifty apinew eureka flex-web apiddl config config-center"
+REPOS="tools Nifty apinew eureka flex-web flex-common config config-center"
 if [ ! -d "${BASEPATH}" ] ; then
   mkdir -p "${BASEPATH}"
 fi
