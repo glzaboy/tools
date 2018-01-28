@@ -1,0 +1,14 @@
+#!/bin/sh
+cd /root/software/push2remote
+if [[ ! -d $1 ]]; then
+	git clone /home/git/$1 /root/software/push2remote/$1 --mirror
+	cd $1
+	git remote add github git@github.com:glzaboy/$1
+	cd ..
+fi
+cd $1
+echo "更新最新代码"
+git fetch origin --prune -v 
+echo "推送github"
+git push github --prune --mirror -v
+echo "完成更新 $1"

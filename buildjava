@@ -1,0 +1,40 @@
+#!/bin/sh
+if [ $# -eq 0 ]
+then
+	echo "Usage: buildjava <project.git>"
+	exit 1
+fi
+PROJECTFIXED=$(echo "$1" | sed 's/\.git$\|$/.git/i')
+
+if [[ ! -d "/home/git/$PROJECTFIXED" ]]; then
+	echo "项目不存在"
+	exit 1;
+fi
+ROOT_PATH="/root/software/build"
+
+if [[ ! -d "$ROOT_PATH/$PROJECTFIXED" ]] ; then 
+
+	mkdir -p "$ROOT_PATH/$PROJECTFIXED"
+	cd "$ROOT_PATH/$PROJECTFIXED"
+	git clone "/home/git/$PROJECTFIXED" ./
+fi
+
+cd "$ROOT_PATH/$PROJECTFIXED"
+git pull -p 
+git submodule init
+git submodule update
+
+PROJECT=$(echo "$PROJECTFIXED" | sed 's/\.git$\|$//i')
+PIDINFO=`/usr/bin/jps -l | /usr/bin/grep $PROJECT`
+PID=`echo ${PIDINFO}|awk '{print $1}'`
+echo "停止原来项目PID ${PID}"
+/usr/bin/kill  $PID
+if [[ $2 == "1" ]] ; then
+	echo "清理项目"
+	mvn clean
+fi
+echo "编译项目"
+mvn package
+cd target
+/usr/bin/nohup /usr/bin/java -jar -Dspring.cloud.config.profile=prod  $PROJECT.jar  2>&1 & 
+

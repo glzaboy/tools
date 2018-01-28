@@ -1,0 +1,5 @@
+#!/bin/sh
+REPO=`ls /home/git|grep '.git'`
+for x in $REPO; do
+	push2remote $x
+done

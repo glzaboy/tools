@@ -1,0 +1,21 @@
+#!/bin/sh
+cd /home/git/
+# If no project name is given
+if [ $# -eq 0 ]
+then
+
+	# Display usage and stop
+	echo "Usage: create <project.git>"
+	exit 1
+fi
+PROJECTFIXED=$(echo "$1" | sed 's/\.git$\|$/.git/i')
+
+
+
+if [[ ! -d "$PROJECTFIXED" ]]; then
+	git init --bare "$PROJECTFIXED"
+	chown -R git:git "$PROJECTFIXED"
+	echo "git创建成功"
+else
+	echo "git $PROJECTFIXED 已经存在"
+fi
