@@ -1,6 +1,6 @@
 #!/bin/sh
 BASEPATH=`echo ~/IdeaProjects`
-echo "根目录路径为\033[31;5m ${BASEPATH} \033[0m"
+echo -e "根目录路径为\033[31;5m ${BASEPATH} \033[0m"
 REPOS="tools Nifty apinew eureka flex-web flex-common config config-center"
 if [ ! -d "${BASEPATH}" ] ; then
   mkdir -p "${BASEPATH}"
