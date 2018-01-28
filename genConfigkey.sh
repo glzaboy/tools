@@ -1,0 +1,2 @@
+#!/bin/sh
+keytool -genkeypair -alias config -keyalg RSA -dname "CN=spring config,OU=config,O=crudelion.com,L=ChongQing,S=ChongQing,C=CN" -keypass UqLu6P8B -keystore config-service.jks -storepass bRcHJSfp -validity 1000
