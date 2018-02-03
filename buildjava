@@ -38,3 +38,9 @@ mvn package
 cd target
 /usr/bin/nohup /usr/bin/java -jar -Dspring.cloud.config.profile=prod  $PROJECT.jar  2>&1 & 
 
+#print \n end nohup
+str=$"\n"
+sstr=$(echo -e $str)
+echo $sstr
+
+tail -f nohup.out
