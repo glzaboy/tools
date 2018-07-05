@@ -1,0 +1,11 @@
+#!/bin/sh
+REMOTEPORT=$1;
+if [[ $2="" ]]; then
+  LOCALPORT=$REMOTEPORT;
+  else
+  LOCALPORT=$2; 
+fi
+echo "远程port $REMOTEPORT"
+echo "本地port $LOCALPORT"
+
+ssh -fNg -L "${LOCALPORT}:127.0.0.1:${REMOTEPORT}" root@crudelion.com
