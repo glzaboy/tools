@@ -5,7 +5,7 @@ then
 	exit 1
 fi
 PROJECT=$(echo "$1" | sed 's/\.git$//');
-PROJECTFIXED="${FIXGITEXT}.git"
+PROJECTFIXED="${PROJECT}.git"
 #if [[ ! -d "/home/git/$PROJECTFIXED" ]]; then
 #	echo "项目不存在"
 #	exit 1;
@@ -20,11 +20,13 @@ if [[ ! -d "$ROOT_PATH/$PROJECTFIXED" ]] ; then
 	cd "$ROOT_PATH/$PROJECTFIXED"
 	git clone "git@crudelion.com:$PROJECTFIXED" ./
 fi
+echo "切换到目录$ROOT_PATH/$PROJECTFIXED"
 
 cd "$ROOT_PATH/$PROJECTFIXED"
 git pull -p 
 git submodule init
 git submodule update
+echo "当前项目位于:"$(pwd)
 
 PIDINFO=`/usr/bin/jps -l | /usr/bin/grep $PROJECT`
 PID=`echo ${PIDINFO}|awk '{print $1}'`
