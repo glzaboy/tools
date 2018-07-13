@@ -1,49 +1,64 @@
 #!/bin/sh
 if [ $# -eq 0 ]
 then
-	echo "Usage: buildjava <project.git>"
+	echo "Usage: buildjava project or buildjava project <1>"
 	exit 1
 fi
 PROJECT=$(echo "$1" | sed 's/\.git$//');
 PROJECTFIXED="${PROJECT}.git"
-#if [[ ! -d "/home/git/$PROJECTFIXED" ]]; then
-#	echo "项目不存在"
-#	exit 1;
-#fi
 
+ROOT_PATH=$(env|grep HOME|awk -F '='   '{print $2}')"/software/buildjava"
 
-ROOT_PATH=$(env | grep ^HOME= | cut -c 6-)"/software/buildjava"
+echo "工作目录${ROOT_PATH}"
 
-if [[ ! -d "$ROOT_PATH/$PROJECTFIXED" ]] ; then 
-
+if [[ ! -d "$ROOT_PATH/$PROJECTFIXED" ]] ; then
 	mkdir -p "$ROOT_PATH/$PROJECTFIXED"
 	cd "$ROOT_PATH/$PROJECTFIXED"
 	git clone "git@crudelion.com:$PROJECTFIXED" ./
 fi
+
+if [[ ! -f "$ROOT_PATH/$PROJECTFIXED/pom.xml" ]] ;then
+    echo "项目不存在,删除check文件"
+    rm -frv "$ROOT_PATH/$PROJECTFIXED"
+    exit;
+fi
+
 echo "切换到目录$ROOT_PATH/$PROJECTFIXED"
 
 cd "$ROOT_PATH/$PROJECTFIXED"
-git pull -p 
+echo "更新项目"
+git pull -p
 git submodule init
 git submodule update
-echo "当前项目位于:"$(pwd)
 
-PIDINFO=`/usr/bin/jps -l | /usr/bin/grep $PROJECT`
-PID=`echo ${PIDINFO}|awk '{print $1}'`
-echo "停止原来项目PID ${PID}"
-/usr/bin/kill  $PID
 if [[ $2 == "1" ]] ; then
-	echo "清理项目"
-	mvn clean
+        echo "清理项目"
+        mvn clean
 fi
-echo "编译项目"
-mvn package
-cd target
-/usr/bin/nohup /usr/bin/java -jar -Dspring.cloud.config.profile=prod  $PROJECT.jar  2>&1 & 
+if [[ -f "$ROOT_PATH/$PROJECTFIXED/project.properties" ]] ; then
+    INSTALL=$(cat project.properties|awk -F "=" '{print $2}')
+    #INSTALL=$(cat  "$ROOT_PATH/$PROJECTFIXED/project.properties"| grep ^install= | cut -c 9-10)
+else
+    INSTALL=0;
+fi
 
-#print \n end nohup
-str=$"\n"
-sstr=$(echo -e $str)
-echo $sstr
+if [[ $INSTALL  == 1 ]] ; then
+    echo "安装到maven"
+    mvn install
+else
+    echo "运行java"
+    PIDINFO=`/usr/bin/jps -l | /usr/bin/grep $PROJECT`
+    PID=`echo ${PIDINFO}|awk '{print $1}'`
+    echo "停止原来项目PID ${PID}"
+    /usr/bin/kill  $PID
+    echo "编译项目"
+    mvn package
+    cd target
+    /usr/bin/nohup /usr/bin/java -jar -Dspring.cloud.config.profile=prod  $PROJECT.jar  2>&1 &
 
-tail -f nohup.out
+    #print \n end nohup
+    str=$"\n"
+    sstr=$(echo -e $str)
+    echo $sstr
+    tail -f nohup.out
+fi
