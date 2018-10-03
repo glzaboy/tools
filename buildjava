@@ -37,7 +37,7 @@ echo "工作目录${ROOT_PATH}"
 if [[ ! -d "$ROOT_PATH/$PROJECTFIXED" ]] ; then
 	mkdir -p "$ROOT_PATH/$PROJECTFIXED"
 	cd "$ROOT_PATH/$PROJECTFIXED"
-	git clone "git@crudelion.com:$PROJECTFIXED" ./
+	git clone "ssh://git@git.crudelion.com:8022/guliuzhong/${PROJECTFIXED}" ./
 fi
 
 if [[ ! -f "$ROOT_PATH/$PROJECTFIXED/pom.xml" ]] ;then
