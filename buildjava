@@ -79,12 +79,12 @@ else
     if [[ $JMXPORT -gt 0 ]] ;then
         if [[ `netstat -tnl|grep $JMXPORT|wc -l` -gt 0 ]] ; then
             echo "在端口${JMXPORT}上启动调试失败，以常规方式启动"
-            /usr/bin/nohup /usr/bin/java -jar -Dspring.cloud.config.profile=prod  $PROJECT.jar  2>&1 &
+            /usr/bin/nohup /usr/bin/java -jar -Dspring.cloud.config.profile=prod  $PROJECT.jar >/dev/null 2>&1 &
         else
-            /usr/bin/nohup /usr/bin/java -Dcom.sun.management.jmxremote.port=$JMXPORT -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -jar -Dspring.cloud.config.profile=prod  $PROJECT.jar  2>&1 &
+            /usr/bin/nohup /usr/bin/java -Dcom.sun.management.jmxremote.port=$JMXPORT -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -jar -Dspring.cloud.config.profile=prod  $PROJECT.jar >/dev/null 2>&1 &
         fi
     else
-            /usr/bin/nohup /usr/bin/java -jar -Dspring.cloud.config.profile=prod  $PROJECT.jar  2>&1 &
+            /usr/bin/nohup /usr/bin/java -jar -Dspring.cloud.config.profile=prod  $PROJECT.jar >/dev/null 2>&1 &
     fi
     str=$"\n"
     sstr=$(echo -e $str)
