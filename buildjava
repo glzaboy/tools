@@ -86,8 +86,8 @@ else
     else
             /usr/bin/nohup /usr/bin/java -jar -Dspring.cloud.config.profile=prod  $PROJECT.jar >/dev/null 2>&1 &
     fi
-    str=$"\n"
-    sstr=$(echo -e $str)
-    echo $sstr
-    tail -f nohup.out
+    #str=$"\n"
+    #sstr=$(echo -e $str)
+    #echo $sstr
+    #tail -f nohup.out
 fi
