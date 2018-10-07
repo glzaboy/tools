@@ -1,0 +1,3 @@
+#/bin/sh
+cd ~/software
+certbot  -d "*.crudelion.com,crudelion.com" --manual --preferred-challenges dns-01 --server https://acme-v02.api.letsencrypt.org/directory certonly
