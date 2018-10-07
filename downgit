@@ -10,8 +10,8 @@ for git in $REPOS; do
   echo "项目目录${PROJ_PATH}"
   if [ ! -d "${PROJ_PATH}" ] ; then
     cd "${BASEPATH}"
-    echo "初始化项目ssh://git@git.crudelion.com:8022/guliuzhong/${git}.git"
-    git clone "ssh://git@git.crudelion.com:8022/guliuzhong/${git}.git"
+    echo "初始化项目ssh://git@git.crudelion.com:822/glzaboy/${git}.git"
+    git clone "ssh://git@git.crudelion.com:822/glzaboy/${git}.git"
     cd "${PROJ_PATH}"
     git submodule init
     echo "创建${git}完成"
