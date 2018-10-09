@@ -1,5 +1,6 @@
 #!/bin/sh
-REPOS=`cat .gitrepo`
+BASEPATH=$(cd `dirname $0`; pwd)
+REPOS=`cat ${BASEPATH}/.gitrepo`
 echo "即将更新如下git $REPOS"
 for GITINFO in $REPOS; do
   GIT=$(echo $GITINFO|awk -F ':'   '{print $2}')
