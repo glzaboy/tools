@@ -1,26 +1,11 @@
 #!/bin/sh
-BASEPATH=`echo ~/IdeaProjects`
-echo -e "根目录路径为\033[31;5m ${BASEPATH} \033[0m"
-REPOS="flex-api flex-static tools apinew eureka flex-web flex-common config config-center"
-if [ ! -d "${BASEPATH}" ] ; then
-  mkdir -p "${BASEPATH}"
-fi
-for git in $REPOS; do
-  PROJ_PATH="${BASEPATH}/$git";
-  echo "项目目录${PROJ_PATH}"
-  if [ ! -d "${PROJ_PATH}" ] ; then
-    cd "${BASEPATH}"
-    echo "初始化项目ssh://git@git.crudelion.com:822/glzaboy/${git}.git"
-    git clone "ssh://git@git.crudelion.com:822/glzaboy/${git}.git"
-    cd "${PROJ_PATH}"
-    git submodule init
-    echo "创建${git}完成"
-  fi
-  cd "${PROJ_PATH}"
-  echo "更新git"
-  git pull origin
-  git submodule update
-  echo "项目${git}更新完成"
+REPOS=`cat .gitrepo`
+echo "即将更新如下git $REPOS"
+for GITINFO in $REPOS; do
+  GIT=$(echo $GITINFO|awk -F ':'   '{print $2}')
 
 
+
+  GITUSER=$(echo $GITINFO|awk -F ':'   '{print $1}')
+  pullgit -p $GIT -u $GITUSER
 done

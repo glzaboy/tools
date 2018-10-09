@@ -72,7 +72,7 @@ else
     PIDINFO=`/usr/bin/jps -l | /usr/bin/grep $PROJECT`
     PID=`echo ${PIDINFO}|awk '{print $1}'`
     echo "停止原来项目PID ${PID}"
-    /usr/bin/kill  $PID
+    kill  $PID
     echo "编译项目"
     mvn package
     cd target
