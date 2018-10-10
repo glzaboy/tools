@@ -1,19 +1,24 @@
 #!/bin/sh
 if [ $# -eq 0 ]
 then
-	echo "Usage: $0 -p project [-r] [-d JMXPORT]"
+	echo "Usage: $0 -p user:project [-r] [-d JMXPORT]"
 	exit 1
 fi
 while getopts  :p:rd: OPTION; do
 
     case $OPTION in
         p)
-            PROJECT=$(echo "$OPTARG" | sed 's/\.git$//');
+            GIT=$(echo $OPTARG|awk -F ':'  '{print $2}')
+            GITUSER=$(echo $OPTARG|awk -F ':'   '{print $1}')
+            if [[ -z $GIT || -z $GITUSER ]] ; then
+                echo "Usage: $0 -p user:project [-r] [-d JMXPORT]"
+                echo "project not exis"
+            fi
+            #PROJECT=$(echo "$OPTARG" | sed 's/\.git$//');
         ;;
         r)
             RESET="1";
         ;;
-            
         d)
             JMXPORT=$OPTARG;
             if [[ $JMXPORT -le 0 ]] ; then
@@ -27,38 +32,42 @@ while getopts  :p:rd: OPTION; do
 
     esac;
 done
-
+pullgit -p $GIT -u $GITUSER
+ROOT_PATH=$(env|grep HOME|awk -F '='   '{print $2}')"/IdeaProjects"
+PROJECT=$(echo "$GIT" | sed 's/\.git$//');
 PROJECTFIXED="${PROJECT}.git"
 
-ROOT_PATH=$(env|grep HOME|awk -F '='   '{print $2}')"/software/buildjava"
 
-echo "工作目录${ROOT_PATH}"
-
-if [[ ! -d "$ROOT_PATH/$PROJECTFIXED" ]] ; then
-	mkdir -p "$ROOT_PATH/$PROJECTFIXED"
-	cd "$ROOT_PATH/$PROJECTFIXED"
-	git clone "ssh://git@git.crudelion.com:822/glzaboy/${PROJECTFIXED}" ./
-fi
-
-if [[ ! -f "$ROOT_PATH/$PROJECTFIXED/pom.xml" ]] ;then
-    echo "项目不存在,删除check文件"
-    rm -frv "$ROOT_PATH/$PROJECTFIXED"
+if [[ ! -f "$ROOT_PATH/${GITUSER}/${PROJECTFIXED}/pom.xml" ]] ;then
+    echo "不是java项目无法运行"
+    echo "$ROOT_PATH/${GITUSER}/${PROJECTFIXED}/pom.xml不存在"
     exit;
 fi
 
-echo "切换到目录$ROOT_PATH/$PROJECTFIXED"
 
-cd "$ROOT_PATH/$PROJECTFIXED"
-echo "更新项目"
-git pull -p
-git submodule init
-git submodule update
 
+
+
+
+#ROOT_PATH=$(env|grep HOME|awk -F '='   '{print $2}')"/software/buildjava"
+
+echo "工作目录${ROOT_PATH}"
+
+#if [[ ! -d "$ROOT_PATH/$PROJECTFIXED" ]] ; then
+#	mkdir -p "$ROOT_PATH/$PROJECTFIXED"
+#	cd "$ROOT_PATH/$PROJECTFIXED"
+#	git clone "ssh://git@git.crudelion.com:822/glzaboy/${PROJECTFIXED}" ./
+#fi
+
+
+echo "切换到目录${GITUSER}/${PROJECTFIXED}"
+
+cd "$ROOT_PATH/${GITUSER}/${PROJECTFIXED}"
 if [[ $RESET == "1" ]] ; then
         echo "清理项目"
         mvn clean
 fi
-if [[ -f "$ROOT_PATH/$PROJECTFIXED/project.properties" ]] ; then
+if [[ -f "$ROOT_PATH/${GITUSER}/$PROJECTFIXED/project.properties" ]] ; then
     INSTALL=$(cat project.properties|awk -F "=" '{print $2}')
 else
     INSTALL=0;
