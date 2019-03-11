@@ -27,8 +27,9 @@ if [[ ! -d "$ROOT_PATH/${U}/${PROJECTFIXED}" ]] ; then
 	echo -e "项目不存在"
 	exit
 fi
-git remote add github git@github.com:${U}/${PROJECTFIXED}
+#git remote add github "git@github.com:${U}/${PROJECTFIXED}"
 cd "$ROOT_PATH/${U}/${PROJECTFIXED}"
+git remote add github "git@github.com:${U}/${PROJECTFIXED}"
 echo "更新最新代码"
 git fetch origin --prune -v 
 echo "推送github"
