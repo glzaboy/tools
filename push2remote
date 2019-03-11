@@ -22,7 +22,7 @@ done
 PROJECTFIXED="${PROJECT}.git"
 ROOT_PATH=$(env|grep HOME|awk -F '='   '{print $2}')"/IdeaProjects"
 echo -e "根目录路径为\033[31;5m ${ROOT_PATH} \033[0m"
-pullgit -p ${PROJECTFIXED}-u ${U}
+pullgit -p ${PROJECTFIXED} -u ${U}
 if [[ ! -d "$ROOT_PATH/${U}/${PROJECTFIXED}" ]] ; then
 	echo -e "项目不存在"
 	exit
