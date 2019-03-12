@@ -31,7 +31,7 @@ if [[ ! -d "$ROOT_PATH/${U}/${PROJECTFIXED}" ]] ; then
     echo "版本库地址 ssh://git@git.crudelion.com:822/${U}/${PROJECTFIXED}"
     git clone "ssh://git@git.crudelion.com:822/${U}/${PROJECTFIXED}" ./ --mirror
 fi
-if [[ ! -d "$ROOT_PATH/${U}/${PROJECTFIXED}/.git" ]] ;then
+if [[ ! -d "$ROOT_PATH/${U}/${PROJECTFIXED}/objects/info" ]] ;then
     echo "项目不存在,删除check文件"
     rm -frv "$ROOT_PATH/${U}/${PROJECTFIXED}"
     exit;
