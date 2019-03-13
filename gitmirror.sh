@@ -1,8 +1,8 @@
 #!/bin/sh
 if [ $# -eq 0 ]
 then
-    echo "Usage: $0 -p project -u guliuzhong"
-    exit 1
+	echo "Usage: $0 -p project -u guliuzhong"
+	exit 1
 fi
 while getopts  :p:u: OPTION; do
 
@@ -26,12 +26,12 @@ ROOT_PATH=$(env|grep HOME|awk -F '='   '{print $2}')"/IdeaProjects/mirror"
 echo -e "根目录路径为\033[31;5m ${ROOT_PATH} \033[0m"
 
 if [[ ! -d "$ROOT_PATH/${U}/${PROJECTFIXED}" ]] ; then
-    mkdir -p "$ROOT_PATH/${U}/${PROJECTFIXED}"
-    cd "$ROOT_PATH/${U}/${PROJECTFIXED}"
-    echo "版本库地址 ssh://git@git.qintingfm.com:822/${U}/${PROJECTFIXED}"
-    git clone "ssh://git@git.qintingfm.com:822/${U}/${PROJECTFIXED}" ./ --mirror
+	mkdir -p "$ROOT_PATH/${U}/${PROJECTFIXED}"
+	cd "$ROOT_PATH/${U}/${PROJECTFIXED}"
+	echo "版本库地址 ssh://git@git.qintingfm.com:822/${U}/${PROJECTFIXED}"
+	git clone "ssh://git@git.qintingfm.com:822/${U}/${PROJECTFIXED}" ./ --mirror
 fi
-if [[ ! -d "$ROOT_PATH/${U}/${PROJECTFIXED}/objects/info" ]] ;then
+if [[ ! -d "$ROOT_PATH/${U}/${PROJECTFIXED}/.git" ]] ;then
     echo "项目不存在,删除check文件"
     rm -frv "$ROOT_PATH/${U}/${PROJECTFIXED}"
     exit;

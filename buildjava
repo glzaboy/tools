@@ -44,22 +44,7 @@ if [[ ! -f "$ROOT_PATH/${GITUSER}/${PROJECTFIXED}/pom.xml" ]] ;then
     exit;
 fi
 
-
-
-
-
-
-#ROOT_PATH=$(env|grep HOME|awk -F '='   '{print $2}')"/software/buildjava"
-
 echo "工作目录${ROOT_PATH}"
-
-#if [[ ! -d "$ROOT_PATH/$PROJECTFIXED" ]] ; then
-#	mkdir -p "$ROOT_PATH/$PROJECTFIXED"
-#	cd "$ROOT_PATH/$PROJECTFIXED"
-#	git clone "ssh://git@git.crudelion.com:822/glzaboy/${PROJECTFIXED}" ./
-#fi
-
-
 echo "切换到目录${GITUSER}/${PROJECTFIXED}"
 
 cd "$ROOT_PATH/${GITUSER}/${PROJECTFIXED}"
