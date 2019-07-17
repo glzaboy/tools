@@ -1,0 +1,12 @@
+#!/bin/sh
+echo '以下文件符合要求'
+if [[ `uname` == 'Linux' ]] ; then 
+	echo 'Linux'
+	ls |xargs md5sum |grep $1|awk -F ' '  '{print $2}'
+	ls |xargs md5sum |grep $1|awk -F ' '  '{print $2}'|xargs rm
+fi
+if [[ `uname` == 'Darwin' ]] ; then 
+	echo 'MAC'
+	ls |xargs md5 |grep $1|awk -F ' '  '{print $2}'|sed -e 's/(//g;s/)//'
+	ls |xargs md5 |grep $1|awk -F ' '  '{print $2}'|sed -e 's/(//g;s/)//'|xargs rm
+fi
