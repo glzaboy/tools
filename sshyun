@@ -1,2 +1,2 @@
 #!/bin/sh
-ssh -D 8080 root@crudelion.com
+ssh -D 8080 root@qintingfm.com
