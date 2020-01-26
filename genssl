@@ -1,2 +1,2 @@
 #/bin/sh
-certbot  -d "*.qintingfm.com,qintingfm.com,microtf.com,*.microtf.com" --manual --preferred-challenges dns-01 --server https://acme-v02.api.letsencrypt.org/directory certonly
+certbot-auto  -d "*.qintingfm.com,qintingfm.com,microtf.com,*.microtf.com" --manual --preferred-challenges dns-01 --server https://acme-v02.api.letsencrypt.org/directory certonly
