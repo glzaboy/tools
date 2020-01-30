@@ -28,8 +28,9 @@ echo -e "根目录路径为\033[31;5m ${ROOT_PATH} \033[0m"
 if [[ ! -d "$ROOT_PATH/${U}/${PROJECTFIXED}" ]] ; then
     mkdir -p "$ROOT_PATH/${U}/${PROJECTFIXED}"
     cd "$ROOT_PATH/${U}/${PROJECTFIXED}"
-    echo "版本库地址 ssh://git@git.qintingfm.com:822/${U}/${PROJECTFIXED}"
-    git clone "ssh://git@git.qintingfm.com:822/${U}/${PROJECTFIXED}" ./ --mirror
+
+    echo "版本库地址 git@gitee.com:${U}/${PROJECTFIXED}"
+    git clone "git@gitee.com:${U}/${PROJECTFIXED}" ./ --mirror
 fi
 if [[ ! -d "$ROOT_PATH/${U}/${PROJECTFIXED}/objects/info" ]] ;then
     echo "项目不存在,删除check文件"
