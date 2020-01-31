@@ -1,0 +1,79 @@
+#!/bin/sh
+if [ $# -eq 0 ]
+then
+	echo "Usage: $0 -p user:project [-r] [-d JMXPORT]"
+	exit 1
+fi
+while getopts  :p:u:rh: OPTION; do
+
+    case $OPTION in
+        p)
+            PROJECT=$(echo "$OPTARG" | sed 's/\.git$//');
+        ;;
+	u)
+            GITUSER=$(echo "$OPTARG" | sed 's/\.git$//');
+        ;;
+        r)
+            RESET="1";
+        ;;
+        h)
+            HOST=${OPTARG:-'localhost'};
+        ;;
+        ?)
+            echo "illegal option $OPTION $OPTARG"
+            exit 1;;
+
+    esac;
+done
+buildjava -p $PROJECT -u $GITUSER -r
+BUILD_RET=$?
+
+ROOT_PATH=$(env|grep HOME|awk -F '='   '{print $2}')"/buildjava"
+PROJECTFIXED="${PROJECT}.git"
+
+
+if [[ $BUILD_RET != 0 ]] ;then
+    echo "程序编译失败无法运行,编译返回码"$BUILD_RET;
+    exit $BUILD_RET;
+fi
+
+echo "工作目录${ROOT_PATH}"
+echo "切换到目录${GITUSER}/${PROJECTFIXED}/target"
+
+cd "$ROOT_PATH/${GITUSER}/${PROJECTFIXED}/target"
+if [[ -f "$ROOT_PATH/${GITUSER}/$PROJECTFIXED/project.properties" ]] ; then
+    INSTALL=$(cat project.properties|awk -F "=" '{print $2}')
+else
+    INSTALL=0;
+fi
+
+if [[ $INSTALL  == 1 ]] ; then
+    echo "检测到项目为maven库，请直接执行 mvn install"
+    exit 126
+else
+    echo $HOST;
+    HOST=${HOST:-"localhost"}
+    HOST=$(echo $HOST|tr [A-Z] [a-z]);
+    echo $HOST
+    if [[ ${HOST} == "localhost" ]] ; then
+	echo "本地运行"
+	PIDINFO=`/usr/bin/jps -l | /usr/bin/grep $PROJECT`
+ 	PID=`echo ${PIDINFO}|awk '{print $1}'`
+	echo "停止原来程序 PID"${PID}
+	kill ${PID}
+	/usr/bin/nohup /usr/bin/java -jar -Dspring.cloud.config.profile=prod  $PROJECT.jar >/dev/null 2>&1 & 
+    else
+	echo "远程运行"
+	scp $PROJECT.jar root@${HOST}:runjava/
+	ssh root@${HOST} 2>&1 <<ESSHELL
+cd runjava/
+echo "#!/bin/sh">start.sh
+echo "jps -l|grep ${PROJECT}|awk '{print "\$\1"}'|xargs kill">>start.sh
+echo "/usr/bin/nohup /usr/bin/java -jar $PROJECT.jar >/dev/null 2>&1 &">>start.sh
+
+sh start.sh
+
+exit
+ESSHELL
+    fi;
+fi
