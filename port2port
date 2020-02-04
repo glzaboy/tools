@@ -1,6 +1,6 @@
 #!/bin/sh
 REMOTEPORT=$1;
-if [[ $2="" ]]; then
+if [[ -z $2 ]]; then
   LOCALPORT=$REMOTEPORT;
   else
   LOCALPORT=$2; 
